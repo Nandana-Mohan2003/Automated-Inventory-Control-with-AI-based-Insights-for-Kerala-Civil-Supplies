@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supplyco | Secure Access</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <!-- PWA -->
+    <meta name="theme-color" content="#0f172a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="icon" type="image/svg+xml" href="/static/icons/v3-premium-icon.svg?v=3">
+    <link rel="apple-touch-icon" href="/static/icons/v3-premium-icon.svg?v=3">
+    <link rel="manifest" href="/manifest.json">
+
+    <style>
+        :root {
+            --glass-bg: rgba(30, 41, 59, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --primary-gradient: linear-gradient(135deg, #3b82f6, #8b5cf6);
+        }
+
+        body {
+            background: radial-gradient(circle at center, #1e293b, #0f172a);
+            color: #f1f5f9;
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            overflow-y: auto;
+            padding: 40px 20px;
+        }
+
+        .login-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px) saturate(160%);
+            -webkit-backdrop-filter: blur(20px) saturate(160%);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 480px;
+            padding: 45px;
+            z-index: 10;
+        }
+
+        .gradient-text {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
+        .form-control {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: white;
+            padding: 12px 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #3b82f6;
+            color: white;
+            box-shadow: none;
+        }
+
+        select option {
+            background-color: #1e293b;
+            color: white;
+        }
+
+        .premium-btn {
+            background: var(--primary-gradient);
+            border: none;
+            color: white;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .premium-btn:hover {
+            transform: scale(1.02);
+            filter: brightness(1.1);
+            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
+        }
+
+        /* Abstract shapes background */
+        .shape {
+            position: absolute;
+            background: var(--primary-gradient);
+            filter: blur(80px);
+            z-index: 1;
+            border-radius: 50%;
+            opacity: 0.4;
+        }
+
+        .shape-1 {
+            width: 300px;
+            height: 300px;
+            top: -50px;
+            left: -50px;
+        }
+
+        .shape-2 {
+            width: 400px;
+            height: 400px;
+            bottom: -100px;
+            right: -50px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* Ration Card Styles */
+        .card-option-yellow { border-left: 5px solid #fbbf24 !important; }
+        .card-option-pink { border-left: 5px solid #f472b6 !important; }
+        .card-option-blue { border-left: 5px solid #60a5fa !important; }
+        .card-option-white { border-left: 5px solid #ffffff !important; }
+    </style>
+</head>
+
+<body>
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+
+    <div class="login-card animate-in">
+        <div class="text-center mb-4">
+            <h1 class="gradient-text display-6 mb-1">Supplyco</h1>
+            <p class="text-secondary small fw-medium">INTUITIVE MANAGEMENT PORTAL</p>
+        </div>
+
+        {% if messages %}
+        <div class="mb-4 animate-in" style="animation-delay: 0.1s;">
+            {% for message in messages %}
+            <div
+                class="alert alert-{{ message.tags|default:'info' }} bg-{{ message.tags|default:'info' }} bg-opacity-10 border-{{ message.tags|default:'info' }} border-opacity-20 text-{{ message.tags|default:'info' }} rounded-4 p-3 small">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if error %}
+        <div
+            class="alert alert-danger bg-danger bg-opacity-10 border-danger border-opacity-20 text-danger rounded-4 p-3 small mb-4">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="mb-4">
+                <label class="form-label text-secondary small fw-bold">USERNAME</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-transparent border-0 pe-0 text-secondary">
+                        <i class="bi bi-person"></i>
+                    </span>
+                    <input type="text" name="username" class="form-control" placeholder="Identity or Staff ID" required>
+                </div>
+            </div>
+            <div class="mb-4">
+                <label class="form-label text-secondary small fw-bold">SECURE TOKEN (PASSWORD)</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-transparent border-0 pe-0 text-secondary">
+                        <i class="bi bi-shield-lock"></i>
+                    </span>
+                    <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label text-secondary small fw-bold">DISTRICT</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-transparent border-0 pe-0 text-secondary">
+                            <i class="bi bi-geo-alt"></i>
+                        </span>
+                        <select name="district" id="district" class="form-control" required>
+                            <option value="" disabled selected>Select District</option>
+                            <option value="Thiruvananthapuram">Thiruvananthapuram</option>
+                            <option value="Kollam">Kollam</option>
+                            <option value="Pathanamthitta">Pathanamthitta</option>
+                            <option value="Alappuzha">Alappuzha</option>
+                            <option value="Kottayam">Kottayam</option>
+                            <option value="Idukki">Idukki</option>
+                            <option value="Ernakulam">Ernakulam</option>
+                            <option value="Thrissur">Thrissur</option>
+                            <option value="Palakkad">Palakkad</option>
+                            <option value="Malappuram">Malappuram</option>
+                            <option value="Kozhikode">Kozhikode</option>
+                            <option value="Wayanad">Wayanad</option>
+                            <option value="Kannur">Kannur</option>
+                            <option value="Kasaragod">Kasaragod</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label text-secondary small fw-bold">CITY / TOWN</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-transparent border-0 pe-0 text-secondary">
+                            <i class="bi bi-building"></i>
+                        </span>
+                        <select name="city" id="city" class="form-control" required>
+                            <option value="" disabled selected>Select City</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-4">
+                <label class="form-label text-secondary small fw-bold">RATION CARD COLOR</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-transparent border-0 pe-0 text-secondary">
+                        <i class="bi bi-card-checklist"></i>
+                    </span>
+                    <select name="ration_card_color" class="form-control" required>
+                        <option value="" disabled selected>Select Card type</option>
+                        <option value="yellow" class="card-option-yellow">Yellow (AAY)</option>
+                        <option value="pink" class="card-option-pink">Pink (PHH)</option>
+                        <option value="blue" class="card-option-blue">Blue (NPS)</option>
+                        <option value="white" class="card-option-white">White (NPNS)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="mb-4">
+                <label class="form-label text-secondary small fw-bold">ACCESS LEVEL</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-transparent border-0 pe-0 text-secondary">
+                        <i class="bi bi-shield-shaded"></i>
+                    </span>
+                    <select name="role" class="form-control" required>
+                        <option value="user" selected>Standard User Access</option>
+                        <option value="staff">Staff Access</option>
+                        <option value="admin">Administrative Access</option>
+                    </select>
+                </div>
+            </div>
+            <div class="d-grid">
+                <button type="submit" class="premium-btn">
+                    Authenticate <i class="bi bi-chevron-right ms-1"></i>
+                </button>
+            </div>
+        </form>
+
+        <div class="mt-5 text-center">
+            <p class="text-secondary small">Unauthorized access is restricted.</p>
+            <a href="{% url 'user_register' %}" class="text-info text-decoration-none fw-bold small">Create New
+                Account</a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const keralaCities = {
+            "Thiruvananthapuram": ["Thiruvananthapuram", "Neyyattinkara", "Attingal", "Nedumangad", "Varkala"],
+            "Kollam": ["Kollam", "Punalur", "Karunagappally", "Paravur", "Kottarakkara"],
+            "Pathanamthitta": ["Pathanamthitta", "Thiruvalla", "Adoor", "Konni", "Pandalam"],
+            "Alappuzha": ["Alappuzha", "Cherthala", "Kayamkulam", "Mavelikkara", "Chengannur", "Mankamkuzhy", "Ezhupunna", "Aroor", "Mullakkal"],
+            "Kottayam": ["Kottayam", "Changanassery", "Pala", "Ettumanour", "Vaikom", "Erumely", "Thirunnakkara", "Chingavanam", "Erathuvadakara", "Thalayolaparambu", "Paika", "Kanjirappara", "Erattupetta", "Puthupalli", "Karukachal", "Kidangoor"],
+            "Idukki": ["Thodupuzha", "Kattappana", "Adimali", "Munnar", "Kumily", "Alakode", "Vandiperiyar", "Vannappuram", "Edavetty"],
+            "Ernakulam": ["Kochi", "Aluva", "Angamaly", "Perumbavoor", "Muvattupuzha", "Kothamangalam", "North Paravur", "Kaloor", "Thrikkakara", "Panampilly Nagar", "Kalamassery", "Moothakunnam", "Vengoor", "Vyttila", "Edapally"],
+            "Thrissur": ["Thrissur", "Chalakudy", "Kunnamkulam", "Guruvayur", "Kodungallur", "Chavakkad", "Ayyanthole", "Pavaratty", "Mulagunnathukavu", "Patturaikkal", "Ashtamichira", "Cheruthuruthy", "Mannuthy"],
+            "Palakkad": ["Palakkad", "Ottapalam", "Shoranur", "Chittur-Thathamangalam", "Mannarkkad", "Puthucode", "Olavakkode", "Pirayiri", "Muthalamada", "Koottanad", "Chandapura", "Sultanpet", "Tattamangalam", "Kulappulli"],
+            "Malappuram": ["Malappuram", "Manjeri", "Tirur", "Ponnani", "Perinthalmanna", "Nilambur", "Kottakkal", "Tanur", "Odamala", "Naduvath", "Chettipadi"],
+            "Kozhikode": ["Kozhikode", "Vatakara", "Quilandy", "Feroke", "Ramanattukara", "Mukkam", "Vengery", "Koduvalli", "Vellimadukunnu", "Kunnamangalam", "Balussery", "Nanmanda", "Mavoor Road", "Ulliyeri", "Koolimadu"],
+            "Wayanad": ["Kalpetta", "Mananthavady", "Sulthan Bathery"],
+            "Kannur": ["Kannur", "Thalassery", "Payyannur", "Taliparamba", "Mattannur", "Iritty", "Thayyil", "Puthiyatheru", "Mambaram", "Chakkarakkal", "Mathamangalam", "Mangattuparamba", "Chemperi", "Elayavoor Chovva", "Kanichar"],
+            "Kasaragod": ["Kasaragod", "Kanhangad", "Nileshwaram", "Uppala", "Puthiyakandam", "Udma", "Cherkala", "Perla"]
+        };
+
+        const districtSelect = document.getElementById('district');
+        const citySelect = document.getElementById('city');
+
+        districtSelect.addEventListener('change', function () {
+            const district = this.value;
+            citySelect.innerHTML = '<option value="" disabled selected>Select City</option>';
+
+            if (keralaCities[district]) {
+                keralaCities[district].forEach(city => {
+                    const option = document.createElement('option');
+                    option.value = city;
+                    option.textContent = city;
+                    citySelect.appendChild(option);
+                });
+            }
+        });
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js');
+            });
+        }
+    </script>
+</body>
+
+</html>

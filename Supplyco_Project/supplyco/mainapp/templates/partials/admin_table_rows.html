@@ -1,0 +1,35 @@
+{% for product in products %}
+<tr>
+    <td>
+        {{ product.display_html|safe }}
+    </td>
+    <td>
+        <div class="d-flex align-items-center mb-1">
+            {{ product.category_badge_html|safe }}
+            {% if product.is_subsidy %}
+            <i class="bi bi-star-fill text-warning ms-2" title="Subsidy Item"></i>
+            {% endif %}
+        </div>
+    </td>
+    <td class="fw-bold text-info">Rs. {{ product.price }}</td>
+    <td id="repo-stock-{{ product.id }}">{{ product.admin_inventory_html|safe }}</td>
+    <td class="text-center">
+        <div class="d-flex gap-2 justify-content-center">
+            <a href="{% url 'edit_product' product.pk %}" class="btn btn-sm btn-dark border-secondary px-3"
+                title="Edit Item">
+                <i class="bi bi-pencil-square"></i>
+            </a>
+            <a href="{% url 'delete_product' product.pk %}" class="btn btn-sm btn-outline-danger px-3"
+                onclick="return confirm('Archive this record?')" title="Delete Item">
+                <i class="bi bi-trash3-fill"></i>
+            </a>
+        </div>
+    </td>
+</tr>
+{% empty %}
+<tr>
+    <td colspan="5" class="text-center py-5">
+        <div class="text-secondary">No records found matching your criteria.</div>
+    </td>
+</tr>
+{% endfor %}
