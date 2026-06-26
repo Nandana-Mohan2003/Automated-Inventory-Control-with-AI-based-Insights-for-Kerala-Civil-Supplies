@@ -1,2 +1,23 @@
-# Automated-Inventory-Control-with-AI-based-Insights-for-Kerala-Civil-Supplies
-Automated Inventory Control with AI-Based Insights for Kerala Civil Supplies is a smart system that allows users to check real-time product availability online instead of visiting supplyco stores. It uses AI for demand forecasting, stock management, and alerts, improving efficiency, transparency, and user convenience.
+# Automated Inventory Control with AI-Based Insights
+
+A web-based inventory management system for Kerala Civil Supplies that helps users check product availability online and helps admins manage stock, alerts, and forecasting.
+
+## Features
+- User registration and login
+- Admin dashboard
+- Product availability checking
+- Stock management
+- AI-based demand forecasting
+- Real-time inventory updates
+
+## Tech Stack
+- Frontend: HTML, CSS, JavaScript, Bootstrap
+- Backend: Python, Django
+- Database: MySQL / SQLite
+
+## How to Run
+```bash
+cd Supplyco_Project/supplyco
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py runserver
