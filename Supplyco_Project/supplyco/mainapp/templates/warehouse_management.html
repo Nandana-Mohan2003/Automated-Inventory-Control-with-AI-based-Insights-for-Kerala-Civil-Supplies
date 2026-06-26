@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Depot Management – Supplyco</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #f0f4ff 0%, #fafafa 100%); min-height: 100vh; }
+        .page-header {
+            background: linear-gradient(135deg, #0f766e, #0d9488);
+            padding: 2rem 0 3rem;
+            clip-path: polygon(0 0, 100% 0, 100% 75%, 0 100%);
+            margin-bottom: 2rem; color: white;
+        }
+        .card-panel { border: none; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.07); }
+        .section-title { font-size: 1rem; font-weight: 700; margin-bottom: 1rem; color: #1f2937; }
+        table.depot-table { border-collapse: separate; border-spacing: 0; width: 100%; }
+        table.depot-table thead th { background: #f9fafb; font-size: 0.78rem; color: #6b7280; padding: 0.6rem 0.8rem; border-bottom: 2px solid #e5e7eb; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+        table.depot-table tbody td { padding: 0.6rem 0.8rem; border-bottom: 1px solid #f3f4f6; font-size: 0.88rem; vertical-align: middle; }
+        table.depot-table tbody tr:hover { background: #f0fdf4; }
+        .depot-badge { background: #d1fae5; color: #065f46; border-radius: 6px; padding: 0.2rem 0.6rem; font-size: 0.78rem; font-weight: 700; }
+        .arrow-badge { color: #6b7280; }
+        .log-arrow { color: #0d9488; font-weight: bold; }
+        .form-label { font-size: 0.83rem; font-weight: 600; color: #374151; }
+    </style>
+</head>
+<body>
+
+<div class="page-header">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h2 class="fw-bold mb-1"><i class="fas fa-warehouse me-2"></i>Depot Management</h2>
+                <p class="mb-0 opacity-75">View stock across all depots and execute inter-depot transfers</p>
+            </div>
+            <div class="d-flex gap-2">
+                <a href="{% url 'stock_arrivals' %}" class="btn btn-light rounded-pill fw-semibold px-3">
+                    <i class="fas fa-boxes me-1"></i> Stock Arrivals
+                </a>
+                <a href="{% url 'admin_dashboard' %}" class="btn btn-outline-light rounded-pill fw-semibold px-3">
+                    <i class="fas fa-arrow-left me-1"></i> Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container pb-5">
+    {% if messages %}
+    <div class="mb-4">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show rounded-3 shadow-sm">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="row g-4">
+
+        <!-- ── TRANSFER FORM ───────────────────────────────────────────── -->
+        <div class="col-lg-4">
+            <div class="card-panel card p-4 sticky-top" style="top:1.5rem;">
+                <h5 class="section-title"><i class="fas fa-exchange-alt me-2 text-teal" style="color:#0d9488;"></i>Transfer Stock Between Depots</h5>
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="transfer">
+
+                    <div class="mb-3">
+                        <label class="form-label">Product</label>
+                        <select class="form-select form-select-sm" name="product" required>
+                            <option value="" disabled selected>— Select product —</option>
+                            {% for p in products %}
+                            <option value="{{ p.id }}">{{ p.name }} ({{ p.unit }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">From Depot</label>
+                        <select class="form-select form-select-sm" name="from_warehouse" required>
+                            <option value="" disabled selected>— Source —</option>
+                            {% for w in warehouses %}
+                            <option value="{{ w.id }}">{{ w.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">To Depot</label>
+                        <select class="form-select form-select-sm" name="to_warehouse" required>
+                            <option value="" disabled selected>— Destination —</option>
+                            {% for w in warehouses %}
+                            <option value="{{ w.id }}">{{ w.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Quantity to Move</label>
+                        <input type="number" step="0.01" min="0.01" class="form-control form-control-sm" name="quantity" required placeholder="e.g. 50">
+                    </div>
+
+                    <div class="row g-2 mb-3">
+                        <div class="col-6">
+                            <label class="form-label">Vehicle No.</label>
+                            <input type="text" class="form-control form-control-sm" name="vehicle_no" placeholder="KL-01-XXXX">
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label">Driver Name</label>
+                            <input type="text" class="form-control form-control-sm" name="driver_name" placeholder="John Doe">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Notes <span class="text-muted fw-normal">(optional)</span></label>
+                        <input type="text" class="form-control form-control-sm" name="notes" placeholder="Reason for transfer...">
+                    </div>
+
+                    <button type="submit" class="btn btn-success w-100 fw-semibold rounded-3">
+                        <i class="fas fa-paper-plane me-1"></i> Execute Transfer
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- ── RIGHT COLUMN: Depot Stock + Transfer Log ───────────────── -->
+        <div class="col-lg-8">
+
+            <!-- Master Godown Summary (Aggregate) -->
+            <div class="card-panel card p-4 mb-4" style="border: 2px solid #0d9488;">
+                <h5 class="section-title"><i class="fas fa-warehouse me-2" style="color:#0d9488;"></i>Master Godown Inventory <span class="badge bg-teal ms-2" style="background:#0d9488; color:white;">Total Aggregate</span></h5>
+                <div style="max-height:300px; overflow-y:auto;">
+                    <table class="depot-table">
+                        <thead>
+                            <tr>
+                                <th>Product Category / Item</th>
+                                <th class="text-end">Total System Stock</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for ms in master_stocks %}
+                            <tr>
+                                <td class="fw-bold">{{ ms.product__name }}</td>
+                                <td class="text-end"><span class="depot-badge" style="font-size:1rem; padding: 0.4rem 1rem;">{{ ms.total_quantity }} {{ ms.product__unit }}</span></td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="2" class="text-center text-muted py-4">No aggregate data available.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Current Stock by Depot -->
+            <div class="card-panel card p-4 mb-4">
+                <h5 class="section-title"><i class="fas fa-cubes me-2" style="color:#0d9488;"></i>Breakdown by Depot</h5>
+                <div style="max-height:400px; overflow-y:auto;">
+                    <table class="depot-table">
+                        <thead>
+                            <tr>
+                                <th>Depot</th>
+                                <th>Product</th>
+                                <th>Stock Level</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for stock in stocks %}
+                            <tr>
+                                <td>
+                                    <span class="fw-semibold" style="color:#0d9488;"><i class="fas fa-map-marker-alt me-1 small"></i>{{ stock.warehouse.name }}</span>
+                                    {% if stock.warehouse.location %}<div class="small text-muted">{{ stock.warehouse.location }}</div>{% endif %}
+                                </td>
+                                <td class="fw-semibold">{{ stock.product.name }}</td>
+                                <td><span class="depot-badge">{{ stock.quantity }} {{ stock.product.unit }}</span></td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="3" class="text-center text-muted py-4">No stock allocated to any depot yet. Confirm an arrival first.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Transfer History -->
+            <div class="card-panel card p-4">
+                <h5 class="section-title"><i class="fas fa-history me-2" style="color:#0d9488;"></i>Transfer History <span class="text-muted fw-normal" style="font-size:0.8rem;">(last 30)</span></h5>
+                <div style="max-height:380px; overflow-y:auto;">
+                    <table class="depot-table">
+                        <thead>
+                            <tr>
+                                <th>Date & Time</th>
+                                <th>Product</th>
+                                <th>Qty</th>
+                                <th>From → To</th>
+                                <th>By</th>
+                                <th>Transport</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for log in transfer_logs %}
+                            <tr>
+                                <td class="small text-muted">{{ log.transferred_at|date:"d M Y, H:i" }}</td>
+                                <td class="fw-semibold small">{{ log.product.name }}</td>
+                                <td><span class="depot-badge">{{ log.quantity }} {{ log.product.unit }}</span></td>
+                                <td class="small">
+                                    <span class="text-danger fw-semibold">{{ log.from_warehouse.name }}</span>
+                                    <span class="log-arrow"> → </span>
+                                    <span class="text-success fw-semibold">{{ log.to_warehouse.name }}</span>
+                                </td>
+                                <td class="small text-muted">{{ log.transferred_by.username|default:"—" }}</td>
+                                <td class="small">
+                                    {% if log.vehicle_no %}
+                                    <div class="fw-bold text-teal" style="font-size: 0.75rem; color: #0d9488;">
+                                        <i class="fas fa-truck me-1"></i>{{ log.vehicle_no }}
+                                    </div>
+                                    <div class="text-muted" style="font-size: 0.7rem;">{{ log.driver_name|default:"Unknown Driver" }}</div>
+                                    {% else %}
+                                    <span class="text-muted">—</span>
+                                    {% endif %}
+                                </td>
+                                <td class="small text-muted fst-italic">{{ log.notes|default:"—" }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="6" class="text-center text-muted py-4">No transfers yet.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

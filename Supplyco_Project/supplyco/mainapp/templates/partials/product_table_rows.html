@@ -1,0 +1,27 @@
+{% for product in products %}
+<tr class="hover-row" id="user-product-row-{{ product.id }}">
+    <td class="ps-4 py-3" id="user-info-{{ product.id }}">
+        {{ product.display_html|safe }}
+    </td>
+    <td class="py-3" id="user-category-{{ product.id }}">
+        <div class="d-flex align-items-center flex-wrap gap-2 mb-1">
+            {{ product.category_badge_html|safe }}
+            {% if product.is_subsidy %}
+            <i class="bi bi-star-fill text-warning" title="Subsidy Item"></i>
+            {% endif %}
+        </div>
+        {{ product.ration_eligibility_html|safe }}
+    </td>
+    <td class="py-3 fw-bold text-success" id="user-price-{{ product.id }}" style="font-size: 1.1rem;">Rs. {{ product.price }}</td>
+    <td class="py-3" id="user-inventory-{{ product.id }}">
+        {{ product.inventory_html|safe }}
+    </td>
+</tr>
+{% empty %}
+<tr>
+    <td colspan="4" class="text-center py-5">
+        <i class="bi bi-inbox text-secondary display-4 mb-3 d-block"></i>
+        <p class="text-secondary">No catalog entries match your query.</p>
+    </td>
+</tr>
+{% endfor %}

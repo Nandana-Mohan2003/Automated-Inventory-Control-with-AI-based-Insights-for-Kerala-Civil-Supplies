@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supplyco | Product Catalog</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <!-- PWA -->
+    <meta name="theme-color" content="#0f172a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="icon" type="image/svg+xml" href="/static/icons/v3-premium-icon.svg?v=3">
+    <link rel="apple-touch-icon" href="/static/icons/v3-premium-icon.svg?v=3">
+    <link rel="manifest" href="/manifest.json">
+
+    <style>
+        :root {
+            --glass-bg: rgba(30, 41, 59, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --primary-gradient: linear-gradient(135deg, #3b82f6, #8b5cf6);
+        }
+
+        body {
+            background: radial-gradient(circle at center, #1e293b, #0f172a);
+            color: #f1f5f9;
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+        }
+
+        .premium-nav {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px) saturate(160%);
+            -webkit-backdrop-filter: blur(20px) saturate(160%);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .gradient-text {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
+        .search-container {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 4px 12px;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-input {
+            background: transparent;
+            border: none;
+            color: white;
+            padding: 8px;
+            width: 100%;
+        }
+
+        .search-input:focus {
+            outline: none;
+        }
+
+        .custom-table {
+            color: #e2e8f0;
+            border-collapse: separate;
+            border-spacing: 0 8px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .custom-table tr {
+            background: rgba(255, 255, 255, 0.02);
+            transition: all 0.2s;
+        }
+
+        .custom-table tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: scale(1.01);
+        }
+
+        .custom-table td,
+        .custom-table th {
+            padding: 1.25rem 1rem;
+            border: none;
+            vertical-align: middle;
+        }
+
+        .custom-table thead th {
+            color: #94a3b8;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .badge-status {
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.7rem;
+            letter-spacing: 0.02rem;
+            font-family: 'Inter', sans-serif;
+            text-transform: uppercase;
+        }
+
+        .logout-btn {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 10px;
+            padding: 8px 16px;
+            font-weight: 600;
+        }
+
+        .logout-btn:hover {
+            background: #ef4444;
+            color: white;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-up {
+            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* Custom Ration Card Badge Colors */
+        .badge-card-yellow { color: #fbbf24 !important; background: rgba(251, 191, 36, 0.15); border: 1px solid rgba(251, 191, 36, 0.3); }
+        .badge-card-pink { color: #f472b6 !important; background: rgba(244, 114, 182, 0.15); border: 1px solid rgba(244, 114, 182, 0.3); }
+        .badge-card-blue { color: #60a5fa !important; background: rgba(96, 165, 250, 0.15); border: 1px solid rgba(96, 165, 250, 0.3); }
+        .badge-card-white { color: #ffffff !important; background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.3); }
+    </style>
+</head>
+
+<body class="bg-dark">
+    <nav class="premium-nav mb-5">
+        <div class="container d-flex justify-content-between align-items-center">
+            <h4 class="gradient-text mb-0">Supplyco Catalog</h4>
+            <div class="d-flex align-items-center gap-3">
+                {% if user_card_color %}
+                <div class="d-flex align-items-center bg-white bg-opacity-5 rounded-pill px-3 py-1 border border-white border-opacity-10 shadow-sm">
+                    <span class="text-secondary small fw-bold me-2">YOUR CARD:</span>
+                    <span class="badge rounded-pill badge-card-{{ user_card_color }}" style="font-size: 0.75rem; letter-spacing: 1px; padding: 0.35rem 0.8rem;">
+                        {{ user_card_color|upper }}
+                    </span>
+                </div>
+                {% endif %}
+                <a href="{% url 'user_logout' %}" class="logout-btn text-decoration-none small">
+                    <i class="bi bi-box-arrow-right me-2"></i>Terminate Session
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col-12 animate-up">
+
+                <div class="glass-card p-4 mb-4">
+                    <form method="GET" action="{% url 'user_products' %}" id="user-filter-form">
+                        <div class="row align-items-center">
+                            <div class="col-lg-12 mb-3">
+                                <div class="search-container">
+                                    <i class="bi bi-search text-secondary me-2"></i>
+                                    <input type="text" name="q" id="user-search-q" class="search-input"
+                                        placeholder="Query inventory..." value="{{ request.GET.q|default:'' }}">
+                                </div>
+                            </div>
+                            <div class="col-lg-12 mb-3">
+                                <div
+                                    class="btn-group w-100 rounded-3 overflow-hidden border border-white border-opacity-10 user-subsidy-buttons">
+                                    <button type="button" data-subsidy="all"
+                                        class="btn btn-dark border-0 py-2 user-filter-btn {% if not request.GET.subsidy or request.GET.subsidy == 'all' %}active bg-primary bg-opacity-25{% endif %}">
+                                        ALL ITEMS
+                                    </button>
+                                    <button type="button" data-subsidy="yes"
+                                        class="btn btn-dark border-0 py-2 user-filter-btn {% if request.GET.subsidy == 'yes' %}active bg-warning bg-opacity-25 text-warning{% endif %}">
+                                        SUBSIDY ONLY
+                                    </button>
+                                    <button type="button" data-subsidy="no"
+                                        class="btn btn-dark border-0 py-2 user-filter-btn {% if request.GET.subsidy == 'no' %}active bg-info bg-opacity-25 text-info{% endif %}">
+                                        NON-SUBSIDY
+                                    </button>
+                                    <input type="hidden" name="subsidy" id="user-subsidy-val"
+                                        value="{{ request.GET.subsidy|default:'all' }}">
+                                </div>
+                            </div>
+                            <div class="col-lg-4 d-flex gap-2 ms-auto">
+                                <button type="submit" class="btn btn-primary w-100 rounded-3 fw-bold">SEARCH</button>
+                                <a href="{% url 'user_products' %}"
+                                    class="btn btn-outline-secondary w-100 rounded-3">CLEAR</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        {% if messages %}
+        <div class="animate-up" style="animation-delay: 0.1s;">
+            {% for message in messages %}
+            <div
+                class="alert alert-info bg-info bg-opacity-10 border-info border-opacity-20 text-info rounded-4 p-3 small">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="glass-card p-4 animate-up" style="animation-delay: 0.2s;">
+            <div class="table-responsive">
+                <table class="table custom-table mb-0">
+                    <thead class="bg-light border-0">
+                        <tr>
+                            <th class="ps-4 py-3 border-0">Product Details</th>
+                            <th class="py-3 border-0">Category</th>
+                            <th class="py-3 border-0">Unit Price</th>
+                            <th class="py-3 border-0">Current Inventory</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% include "partials/product_table_rows.html" %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // AJAX Filtering Logic for User Catalog
+        const filterForm = document.getElementById('user-filter-form');
+        const subsidyButtons = document.querySelectorAll('.user-filter-btn');
+        const subsidyInput = document.getElementById('user-subsidy-val');
+        const tableBody = document.querySelector('.custom-table tbody');
+
+        function updateTable(url) {
+            tableBody.style.opacity = '0.5';
+
+            // Add ajax=1 parameter and cache-buster to help backend identify partial requests
+            const separator = url.includes('?') ? '&' : '?';
+            const ajaxUrl = `${url}${separator}ajax=1&_t=${new Date().getTime()}`;
+
+            fetch(ajaxUrl, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+                .then(response => response.text())
+                .then(html => {
+                    tableBody.innerHTML = html;
+                    tableBody.style.opacity = '1';
+                    window.history.pushState({}, '', url);
+                })
+                .catch(err => {
+                    console.error('AJAX Failure:', err);
+                    tableBody.style.opacity = '1';
+                });
+        }
+
+        // REAL-TIME SYNC LOGIC
+        const stockSocket = new WebSocket(
+            (window.location.protocol === 'https:' ? 'wss://' : 'ws://')
+            + window.location.host
+            + '/ws/stock/'
+        );
+
+        stockSocket.onmessage = function (e) {
+            const data = JSON.parse(e.data);
+            const product = data.message;
+            console.log('User Dashboard Update:', product);
+
+            const row = document.getElementById(`user-product-row-${product.id}`);
+            if (row) {
+                // Flash effect
+                row.style.transition = 'background 0.3s';
+                row.style.background = 'rgba(56, 189, 248, 0.2)';
+                setTimeout(() => { row.style.background = ''; }, 1000);
+
+                // Update Info (Name)
+                const infoCell = document.getElementById(`user-info-${product.id}`);
+                if (infoCell) {
+                    infoCell.innerHTML = `
+                        <div class="fw-bold" style="color: var(--accent-blue); font-size: 1.05rem;">${product.name}</div>
+                        <div class="text-secondary small opacity-75">UID: #${product.id}</div>
+                    `;
+                }
+
+                // Update Category (Subsidy Star)
+                const catCell = document.getElementById(`user-category-${product.id}`);
+                if (catCell) {
+                    const flex = catCell.querySelector('.d-flex');
+                    let star = flex.querySelector('.bi-star-fill');
+                    if (product.is_subsidy) {
+                        if (!star) flex.insertAdjacentHTML('beforeend', '<i class="bi bi-star-fill text-warning ms-2" title="Subsidy Item"></i>');
+                    } else if (star) {
+                        star.remove();
+                    }
+                }
+
+                // Update Price
+                const priceCell = document.getElementById(`user-price-${product.id}`);
+                if (priceCell) {
+                    priceCell.textContent = `Rs. ${product.price}`;
+                    priceCell.style.fontSize = '1.1rem';
+                }
+
+                // Update Inventory (Status Badge)
+                const invCell = document.getElementById(`user-inventory-${product.id}`);
+                if (invCell) {
+                    let label, statusClass;
+                    if (product.quantity == 0) {
+                        label = 'DEPLETED';
+                        statusClass = 'bg-danger text-danger';
+                    } else if (product.quantity < 5) {
+                        label = `<i class="bi bi-exclamation-triangle-fill me-1"></i>CRITICAL (${product.quantity} ${product.unit})`;
+                        statusClass = 'bg-warning text-warning';
+                    } else {
+                        label = `<i class="bi bi-check-circle-fill me-1"></i>AVAILABLE (${product.quantity} ${product.unit})`;
+                        statusClass = 'bg-success text-success';
+                    }
+                    invCell.innerHTML = `<div class="mb-0"><span class="badge-status ${statusClass} bg-opacity-10">${label}</span></div>`;
+                }
+            } else {
+                // If row doesn't exist (new product), refresh the table to include it
+                const currentSubsidy = subsidyInput.value || 'all';
+                const currentQ = document.getElementById('user-search-q').value;
+                updateTable(`?subsidy=${currentSubsidy}${currentQ ? '&q=' + currentQ : ''}`);
+            }
+        };
+
+        stockSocket.onclose = () => { console.log('Stock socket closed.'); };
+
+        subsidyButtons.forEach(btn => {
+            btn.addEventListener('click', function () {
+                const val = this.getAttribute('data-subsidy');
+                subsidyInput.value = val;
+
+                subsidyButtons.forEach(b => {
+                    b.classList.remove('active', 'bg-primary', 'bg-opacity-25', 'bg-warning', 'bg-opacity-25', 'text-warning', 'bg-info', 'bg-opacity-25', 'text-info');
+                });
+
+                if (val === 'all') this.classList.add('active', 'bg-primary', 'bg-opacity-25');
+                else if (val === 'yes') this.classList.add('active', 'bg-warning', 'bg-opacity-25', 'text-warning');
+                else if (val === 'no') this.classList.add('active', 'bg-info', 'bg-opacity-25', 'text-info');
+
+                const q = document.getElementById('user-search-q').value;
+                const url = `?subsidy=${val}${q ? '&q=' + q : ''}`;
+                updateTable(url);
+            });
+        });
+
+        filterForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const val = subsidyInput.value;
+            const q = document.getElementById('user-search-q').value;
+            const url = `?subsidy=${val}${q ? '&q=' + q : ''}`;
+            updateTable(url);
+        });
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js');
+                navigator.serviceWorker.addEventListener('controllerchange', () => window.location.reload());
+            });
+        }
+
+    </script>
+</body>
+
+</html>
