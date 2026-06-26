@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supplyco | New Item</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <!-- PWA -->
+    <meta name="theme-color" content="#0f172a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="icon" type="image/svg+xml" href="/static/icons/v3-premium-icon.svg?v=3">
+    <link rel="apple-touch-icon" href="/static/icons/v3-premium-icon.svg?v=3">
+    <link rel="manifest" href="/manifest.json">
+
+    <style>
+        :root {
+            --glass-bg: rgba(30, 41, 59, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --primary-gradient: linear-gradient(135deg, #3b82f6, #8b5cf6);
+        }
+
+        body {
+            background: radial-gradient(circle at center, #1e293b, #0f172a);
+            color: #f1f5f9;
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .premium-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px) saturate(160%);
+            -webkit-backdrop-filter: blur(20px) saturate(160%);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 500px;
+            padding: 32px;
+        }
+
+        .gradient-text {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #94a3b8;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+        }
+
+        .form-control,
+        .form-select {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: white;
+            padding: 10px 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #3b82f6;
+            color: white;
+            box-shadow: none;
+        }
+
+        .input-group-text {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #94a3b8;
+            border-radius: 12px 0 0 12px;
+        }
+
+        .premium-btn {
+            background: var(--primary-gradient);
+            border: none;
+            color: white;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 700;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .premium-btn:hover {
+            transform: scale(1.02);
+            filter: brightness(1.1);
+            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-outline-secondary {
+            border-radius: 12px;
+            color: #94a3b8;
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-outline-secondary:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: white;
+            color: white;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="premium-card animate-in">
+        <div class="text-center mb-4">
+            <h2 class="gradient-text mb-1">New Entry</h2>
+            <p class="text-secondary small fw-medium">CATALOG MANIFEST UPDATE</p>
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="form-label">PRODUCT NOMENCLATURE</label>
+                <input type="text" name="name" class="form-control" placeholder="Item name" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">CLASSIFICATION</label>
+                <input type="text" name="category" class="form-control" placeholder="e.g. Pulses" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">UNIT VALUATION (INR)</label>
+                <div class="input-group">
+                    <span class="input-group-text">₹</span>
+                    <input type="number" step="0.01" name="price" class="form-control" placeholder="0.00" required>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-6 mb-4">
+                    <label class="form-label">QUANTITY</label>
+                    <input type="number" step="0.1" name="quantity" class="form-control" placeholder="0.0" required>
+                </div>
+                <div class="col-6 mb-4">
+                    <label class="form-label">METRIC</label>
+                    <select name="unit" class="form-select">
+                        <option value="kg">KG</option>
+                        <option value="g">G</option>
+                        <option value="l">L</option>
+                        <option value="ml">ML</option>
+                        <option value="pcs">PCS</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label mb-2">RATION CARD ELIGIBILITY</label>
+                <div class="p-3 rounded-4 border border-white border-opacity-10 bg-white bg-opacity-5">
+                    <div class="row g-2">
+                        <!-- Yellow Card -->
+                        <div class="col-6">
+                            <label class="d-flex align-items-center p-2 rounded-3 border border-warning border-opacity-25 bg-warning bg-opacity-10 cursor-pointer" for="eligYellow" style="cursor: pointer;">
+                                <input class="form-check-input mt-0 me-2" type="checkbox" name="is_eligible_yellow" id="eligYellow" checked style="width: 1.1rem; height: 1.1rem;">
+                                <span class="small fw-bold" style="color: #fbbf24; letter-spacing: 0.5px;">YELLOW (AAY)</span>
+                            </label>
+                        </div>
+                        <!-- Pink Card -->
+                        <div class="col-6">
+                            <label class="d-flex align-items-center p-2 rounded-3 border border-danger border-opacity-25 bg-danger bg-opacity-10 cursor-pointer" for="eligPink" style="cursor: pointer;">
+                                <input class="form-check-input mt-0 me-2" type="checkbox" name="is_eligible_pink" id="eligPink" checked style="width: 1.1rem; height: 1.1rem;">
+                                <span class="small fw-bold" style="color: #f472b6; letter-spacing: 0.5px;">PINK (PHH)</span>
+                            </label>
+                        </div>
+                        <!-- Blue Card -->
+                        <div class="col-6">
+                            <label class="d-flex align-items-center p-2 rounded-3 border border-primary border-opacity-25 bg-primary bg-opacity-10 cursor-pointer" for="eligBlue" style="cursor: pointer;">
+                                <input class="form-check-input mt-0 me-2" type="checkbox" name="is_eligible_blue" id="eligBlue" checked style="width: 1.1rem; height: 1.1rem;">
+                                <span class="small fw-bold" style="color: #60a5fa; letter-spacing: 0.5px;">BLUE (NPS)</span>
+                            </label>
+                        </div>
+                        <!-- White Card -->
+                        <div class="col-6">
+                            <label class="d-flex align-items-center p-2 rounded-3 border border-secondary border-opacity-75 bg-dark bg-opacity-50 cursor-pointer" for="eligWhite" style="cursor: pointer;">
+                                <input class="form-check-input mt-0 me-2" type="checkbox" name="is_eligible_white" id="eligWhite" checked style="width: 1.1rem; height: 1.1rem; accent-color: white;">
+                                <span class="small fw-bold text-white" style="letter-spacing: 0.5px; text-shadow: 0 0 5px rgba(255,255,255,0.2);">WHITE (NPNS)</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <div
+                    class="form-check form-switch p-3 rounded-4 border border-white border-opacity-10 bg-white bg-opacity-5">
+                    <input class="form-check-input ms-0 me-2" type="checkbox" name="is_subsidy" id="isSubsidy">
+                    <label class="form-check-label fw-bold text-warning small" for="isSubsidy"
+                        style="letter-spacing: 1px;">SUBSIDY CATEGORY ITEM</label>
+                </div>
+            </div>
+
+            <div class="d-grid gap-3">
+                <button type="submit" class="premium-btn">COMMENCE LISTING</button>
+                <a href="{% url 'admin_dashboard' %}" class="btn btn-outline-secondary btn-sm">CANCEL OPERATION</a>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js');
+            });
+        }
+    </script>
+</body>
+
+</html>
