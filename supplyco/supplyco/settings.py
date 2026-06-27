@@ -147,3 +147,6 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ],
 }
+import os
+
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
