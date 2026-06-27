@@ -1,5 +1,166 @@
 [
 {
+  "model": "admin.logentry",
+  "pk": 20,
+  "fields": {
+    "action_time": "2026-03-25T11:09:24.358Z",
+    "user": 3,
+    "content_type": 4,
+    "object_id": "19",
+    "object_repr": "blue_user",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 21,
+  "fields": {
+    "action_time": "2026-03-25T11:09:24.358Z",
+    "user": 3,
+    "content_type": 4,
+    "object_id": "18",
+    "object_repr": "pink_user",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 22,
+  "fields": {
+    "action_time": "2026-03-25T11:09:24.358Z",
+    "user": 3,
+    "content_type": 4,
+    "object_id": "20",
+    "object_repr": "white_user",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 23,
+  "fields": {
+    "action_time": "2026-03-25T11:09:24.358Z",
+    "user": 3,
+    "content_type": 4,
+    "object_id": "17",
+    "object_repr": "yellow_user",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 24,
+  "fields": {
+    "action_time": "2026-03-25T11:10:40.110Z",
+    "user": 3,
+    "content_type": 4,
+    "object_id": "21",
+    "object_repr": "kaavi",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"password\"]}}]"
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 3,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$yAwgnQ4nmTYsNb82TxaWYX$T+yXrfowB4ld0mGjge7dYqSbPiAEyVfXMkkYCg/S/uw=",
+    "last_login": "2026-06-26T15:14:59.175Z",
+    "is_superuser": true,
+    "username": "Nandanamohan",
+    "first_name": "",
+    "last_name": "",
+    "email": "nandanamohan@gmail.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-02-13T03:05:52.889Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 16,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$sxY41x6Zy2R7FCSPVu8g7K$6jbp0BJ0sAAWb98S4TdN7GaJniTS0vXaDvZDIcWL5zQ=",
+    "last_login": "2026-03-21T17:20:27.830Z",
+    "is_superuser": false,
+    "username": "ashish",
+    "first_name": "ashish laji",
+    "last_name": "",
+    "email": "ashish@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-03-16T09:23:05.514Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 21,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$vfSKuPpsyKbVaQeC2VSqXT$HRz6Mxlt+zUWXHSXa8ai4/kIEbuvdr9TNhJvNBtD5HE=",
+    "last_login": "2026-06-26T15:18:35.785Z",
+    "is_superuser": false,
+    "username": "kaavi",
+    "first_name": "kavya",
+    "last_name": "",
+    "email": "kavya123@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-03-21T17:48:54.933Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 22,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$8QATkdBSDv4XlACQtell3N$CYUdQUzYcAius+zAeLQV/+OwMVdFnFhmzCLGuuP7t0w=",
+    "last_login": "2026-04-03T16:55:01.804Z",
+    "is_superuser": false,
+    "username": "viji",
+    "first_name": "Vijayalakshmi",
+    "last_name": "",
+    "email": "viji@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-04-03T16:40:20.418Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "7x905plz3564pcelnypewrmc8akfsukg",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGAPF267zeQYQakaiAp7cr479qkC93ec859sQjbWuM28hJnYhcm2el3S4CP3HZAd2i3zrG3dZkT3xV-0MGnTvl5Pdy_gwqjfutz8DmYTEIW76wV3hnhdJZOW1CqeOGSpJI8aGkKEiAhWjIqyRCUUMDeH8j6N6c:1vgx97:r2CIeEJ0m52nA04b9Ra4nCz2Olcn5MTdLgyKSQ8KWsE",
+    "expire_date": "2026-01-31T03:38:41.450Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "r8sb1nzhkxf51tt8dxjlrcp53d3h4jue",
+  "fields": {
+    "session_data": ".eJxVjEsOwjAMRO-SNYqaKKlrluw5Q-TYLi2gROpnVXF3WqkLmOW8N7OZROsypHXWKY1iriaay2-XiV9aDiBPKo9quZZlGrM9FHvS2d6r6Pt2un8HA83DvqbMERSYmzaj2yOMhF1Q51B9CG2ULlLXh-Ag-ixN74Nn6BtARBAwny_ivzdZ:1vr6JY:X7C2Thjgu1j1_rz2rzNrQvNWCTi-Ji-lIN6wtUa2SCQ",
+    "expire_date": "2026-02-28T03:27:24.978Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "rw81jg5aj3rhs3zhh3n9vp7gkksgphwp",
+  "fields": {
+    "session_data": ".eJxVjEsOwjAMBe-SNYpcnObDkj1nqGzHpQWUSP2sEHenlbqA7cy89zYdrcvQrbNO3ZjNxaA5_TImeWrZRX5QuVcrtSzTyHZP7GFne6tZX9ej_TsYaB62tbaUE5IGH8Fn3zK6CNyLQB8BMJ45NNJQaLxsnBCTc5xYQgJVCNl8vuOjN8s:1w8s0S:YsFpocu8nsQBejseyqNCcbk0kp4bgx46Fw3usWeaRpg",
+    "expire_date": "2026-04-18T03:49:08.223Z"
+  }
+},
+{
   "model": "mainapp.staff",
   "pk": 1,
   "fields": {
