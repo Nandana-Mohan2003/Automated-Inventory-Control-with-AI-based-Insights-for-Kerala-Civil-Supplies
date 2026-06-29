@@ -9,8 +9,9 @@ https://docs.djangoproject.com/en/6.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
-
 from pathlib import Path
+import os
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -160,3 +161,4 @@ REST_FRAMEWORK = {
 import os
 
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+database_url = os.environ.get("DATABASE_URL")
