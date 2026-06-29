@@ -12,8 +12,7 @@
         </div>
         {{ product.ration_eligibility_html|safe }}
     </td>
-    <td class="py-3 fw-bold text-success" id="user-price-{{ product.id }}" style="font-size: 1.1rem;">Rs. {{
-        product.price }}</td>
+    <td class="py-3 fw-bold text-success" id="user-price-{{ product.id }}" style="font-size: 1.1rem;">Rs. {{ product.price }}</td>
     <td class="py-3" id="user-inventory-{{ product.id }}">
         {{ product.inventory_html|safe }}
     </td>
